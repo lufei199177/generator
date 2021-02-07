@@ -1,24 +1,38 @@
 package ${daoPackage};
 
-import org.apache.ibatis.annotations.Mapper;
 import ${modelPackage}.${objectName};
 
 import java.util.List;
-import java.util.Map;
 
 /**
-* @author ${user}
-* @date ${year}-${month}-${day} ${time}
-* @desc
+* @author: ${user}
+* @date: ${year}-${month}-${day} ${time}
+* @desc:
 */
-@Mapper
 public interface ${daoName} {
 
-    List<${objectName}> list(Map<String, Object> params);
+    /**
+    * 分页查询
+    */
+    List<${objectName}> page(${objectName} form);
 
-    int save(${objectName} ${objectAlias});
+    /**
+    * 批量保存
+    */
+    int batchSave(List<${objectName}> dtoList);
 
-    int update(${objectName} ${objectAlias});
+    /**
+    * 保存
+    */
+    int save(${objectName} dto);
 
-    int delete(String id);
+    /**
+    * 修改
+    */
+    int update(${objectName} dto);
+
+    /**
+    * 删除
+    */
+    int delete(List<${"String"}> ids);
 }
