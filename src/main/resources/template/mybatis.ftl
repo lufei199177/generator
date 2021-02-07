@@ -64,6 +64,9 @@
     </update>
 
     <delete id="delete">
-        delete from ${tableName} t where t.${tables[0].columnName}=${"#"+"{"+tables[0].propertyName+"}"}
+        delete from ${tableName} t where t.${tables[0].columnName} in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
     </delete>
 </mapper>
