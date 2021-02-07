@@ -4,6 +4,8 @@ package ${modelPackage};
 import ${item};
 </#list>
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
 * @author: ${user}
