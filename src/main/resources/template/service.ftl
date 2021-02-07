@@ -9,6 +9,7 @@ import java.util.List;
 import kfang.infra.api.RequestResult;
 import kfang.infra.common.model.Pagination;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
 * @author: ${user}
@@ -29,14 +30,17 @@ public class ${serviceName} {
         return RequestResult.ok(pagination);
     }
 
+    @Transactional
     public RequestResult<${"Integer"}> add(List<${objectName}> list) {
         return RequestResult.ok(list.size());
     }
 
+    @Transactional
     public RequestResult<${"Integer"}> update(List<${objectName}> list) {
         return RequestResult.ok(list.size());
     }
 
+    @Transactional
     public RequestResult<${"Integer"}> delete(List<${"String"}> list) {
         return RequestResult.ok(list.size());
     }
