@@ -6,6 +6,7 @@ import com.generator.entity.Table;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author lufei
@@ -23,11 +24,14 @@ public class JDBCUtil {
             String url = ConfigUtil.get("jdbc.url");
             String username = ConfigUtil.get("jdbc.username");
             String password = ConfigUtil.get("jdbc.password");
+            Properties props = new Properties();
+            props.put("user", username);
+            props.put("password", password);
+            props.put("remarksReporting", "true");
+
             Class.forName(driver);
-            connection = DriverManager.getConnection(url, username, password);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+            connection = DriverManager.getConnection(url, props);
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -44,21 +48,29 @@ public class JDBCUtil {
         List<String> importList = new ArrayList<String>();
 
         DatabaseMetaData databaseMetaData = connection.getMetaData();
-        ResultSet resultSet = databaseMetaData.getColumns(null, "%", classTemplate.getTableName(), "%");
+        String dbUserName = ConfigUtil.get("jdbc.username");
+        ResultSet resultSet = databaseMetaData.getColumns(null, dbUserName.toUpperCase(), classTemplate.getTableName(), "%");
         while (resultSet.next()) {
             String columnName = resultSet.getString("COLUMN_NAME");
             String propertyName = handleColumn(columnName);
+            String property = propertyName.substring(0, 1).toUpperCase() + propertyName.substring(1);
             String columnComment = resultSet.getString("REMARKS");
-            String dataType = resultSet.getString("TYPE_NAME");
-            dataType = ConfigUtil.get(dataType);
-            if (dataType.contains(".")) {
+            String typeName = resultSet.getString("TYPE_NAME");
+            String decimalDigits = resultSet.getString("DECIMAL_DIGITS");
+            String dataType = ConfigUtil.get(typeName);
+            //获取jdbc数据类型
+            String jdbcType = ConfigUtil.get("TYPE_" + typeName);
+            if (jdbcType == null) {
+                jdbcType = typeName;
+            }
+            if (dataType != null && dataType.contains(".")) {
                 if (!importList.contains(dataType)) {
                     importList.add(dataType);
                 }
                 String[] arr = dataType.split("\\.");
                 dataType = arr[arr.length - 1];
             }
-            Table table = new Table(columnName, propertyName, dataType, columnComment);
+            Table table = new Table(columnName, propertyName, property, dataType, columnComment, jdbcType);
             tables.add(table);
         }
         classTemplate.setTables(tables);
@@ -70,8 +82,8 @@ public class JDBCUtil {
         StringBuilder sb = new StringBuilder(arr[0].toLowerCase());
         for (int i = 1; i < arr.length; i++) {
             String str = arr[i];
-            sb.append(str.substring(0, 1).toUpperCase()).append(str.substring(1));
+            sb.append(str.substring(0, 1).toUpperCase()).append(str.substring(1).toLowerCase());
         }
-        return sb.toString();
+        return sb.substring(1);
     }
 }
