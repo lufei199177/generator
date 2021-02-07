@@ -53,7 +53,7 @@ public class ApplicationUtil {
             classTemplate.setDaoName(objectName + "Dao");
             classTemplate.setDaoAlias(objectAlias + "Dao");
 
-            generator(file.getPath(),templateFile,cfg,classTemplate);
+            generator(file.getPath(), templateFile, cfg, classTemplate);
         }
         System.out.println("结束......");
         long end = System.currentTimeMillis();
@@ -79,7 +79,7 @@ public class ApplicationUtil {
             } else if ("dao.ftl".equals(fileName) && classTemplate.getDaoPackage() != null) {
                 classFileName = classTemplate.getDaoName() + ".java";
             } else if ("model.ftl".equals(fileName) && classTemplate.getModelPackage() != null) {
-                classFileName = classTemplate.getDaoAlias() + ".java";
+                classFileName = classTemplate.getObjectName() + ".java";
             } else if ("mybatis.ftl".equals(fileName) && classTemplate.getDaoPackage() != null
                     && classTemplate.getModelPackage() != null) {
                 classFileName = classTemplate.getDaoAlias() + ".xml";
@@ -90,7 +90,7 @@ public class ApplicationUtil {
             }
 
             Template temp = cfg.getTemplate(fileName);
-            Writer out = new OutputStreamWriter(new FileOutputStream(filePath+"\\"+classFileName),
+            Writer out = new OutputStreamWriter(new FileOutputStream(filePath + "\\" + classFileName),
                     StandardCharsets.UTF_8);
             temp.process(classTemplate, out);
         }
