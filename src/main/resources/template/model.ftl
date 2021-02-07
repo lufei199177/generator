@@ -1,23 +1,25 @@
 package ${modelPackage};
 
-import lombok.Data;
-
 <#list importList as item>
 import ${item};
 </#list>
+import lombok.Data;
 
 /**
-* @author ${user}
-* @date ${year}-${month}-${day} ${time}
-* @desc
+* @author: ${user}
+* @date: ${year}-${month}-${day} ${time}
+* @desc:
 */
 @Data
 public class ${objectName} {
 <#list tables as table>
-    /**
-     * ${table.columnName}
-     * ${table.comment}
-     */
+    <#if (table.dataType == "Date")>
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    <#else>
+
+    </#if>
+    @ApiModelProperty("${table.comment}")
     private ${table.dataType} ${table.propertyName};
 </#list>
 }
