@@ -1,22 +1,44 @@
 package ${servicePackage};
 
+import org.springframework.stereotype.Service;
+import ${daoPackage}.${daoName};
 import ${modelPackage}.${objectName};
 
+import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
+import kfang.infra.api.RequestResult;
+import kfang.infra.common.model.Pagination;
+import lombok.extern.slf4j.Slf4j;
 
 /**
-* @author ${user}
-* @date ${year}-${month}-${day} ${time}
-* @desc
+* @author: ${user}
+* @date: ${year}-${month}-${day} ${time}
+* @desc:
 */
-public interface ${serviceName} {
+@Slf4j
+@Service
+public class ${serviceName} {
 
-    List<${objectName}> list(Map<String, Object> params);
+    @Resource
+    private ${daoName} ${daoAlias};
 
-    int save(${objectName} ${objectAlias});
+    public RequestResult<${"Pagination"}<${objectName}>> page(${objectName} form) {
+        List<${objectName}> list = this.${daoAlias}.page(form);
+        Pagination<${objectName}> pagination = form.makePagination();
+        pagination.setItems(list);
+        pagination.setRecordCount((int) page.getTotal());
+        return RequestResult.ok(pagination);
+    }
 
-    int update(${objectName} ${objectAlias});
+    public RequestResult<${"Integer"}> add(List<${objectName}> list) {
+        return RequestResult.ok(list.size());
+    }
 
-    int delete(String ids);
+    public RequestResult<${"Integer"}> update(List<${objectName}> list) {
+        return RequestResult.ok(list.size());
+    }
+
+    public RequestResult<${"Integer"}> delete(List<${"String"}> list) {
+        return RequestResult.ok(list.size());
+    }
 }
