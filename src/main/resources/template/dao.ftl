@@ -34,5 +34,5 @@ public interface ${daoName} {
     /**
     * 删除
     */
-    int delete(List<${"String"}> ids);
+    int delete(List<${"String"}> list);
 }
