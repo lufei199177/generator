@@ -23,16 +23,34 @@ public class Table {
      * 属性名
      */
     private String propertyName;
+    /**
+     * jdbc数据类型
+     */
+    private String jdbcType;
+    /**
+     * 用于get,set拼接
+     */
+    private String property;
 
     public Table() {
 
     }
 
-    public Table(String columnName, String propertyName, String dataType, String comment) {
+    public Table(String columnName, String propertyName, String property, String dataType, String comment, String jdbcType) {
         this.columnName = columnName;
         this.dataType = dataType;
-        this.comment = comment;
+        this.comment = comment == null ? "" : comment;
         this.propertyName = propertyName;
+        this.property = property;
+        this.jdbcType = jdbcType;
+    }
+
+    public String getJdbcType() {
+        return jdbcType;
+    }
+
+    public void setJdbcType(String jdbcType) {
+        this.jdbcType = jdbcType;
     }
 
     public String getColumnName() {
@@ -65,5 +83,13 @@ public class Table {
 
     public void setPropertyName(String propertyName) {
         this.propertyName = propertyName;
+    }
+
+    public String getProperty() {
+        return property;
+    }
+
+    public void setProperty(String property) {
+        this.property = property;
     }
 }
