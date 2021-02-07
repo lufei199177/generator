@@ -26,7 +26,6 @@ public class ${serviceName} {
         List<${objectName}> list = this.${daoAlias}.page(form);
         Pagination<${objectName}> pagination = form.makePagination();
         pagination.setItems(list);
-        pagination.setRecordCount((int) page.getTotal());
         return RequestResult.ok(pagination);
     }
 
