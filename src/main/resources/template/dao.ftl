@@ -19,7 +19,7 @@ public interface ${daoName} {
     /**
     * 批量保存
     */
-    int batchSave(List<${objectName}> dtoList);
+    int batchSave(List<${objectName}> list);
 
     /**
     * 保存
