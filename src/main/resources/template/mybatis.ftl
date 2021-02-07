@@ -39,7 +39,7 @@
         <include refid="basicSql"/>
         )
         values
-        <foreach collection="collection" item="item" separator=",">
+        <foreach collection="list" item="item" separator=",">
         (
         <#list tables as item>
         ${"#"+"{item."+item.propertyName+",jdbcType="+item.jdbcType+"}"}<#if (item_index < tables?size-1)>,</#if>
