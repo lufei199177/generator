@@ -1,81 +1,69 @@
-package ${controllerPackage}.controller;
+package ${controllerPackage};
 
+import com.kfang.service.dict.basic.api.util.CommonUtil;
 import org.springframework.web.bind.annotation.*;
-import test.entity.ResultJson;
 
 import ${modelPackage}.${objectName};
 import ${servicePackage}.${serviceName};
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
+import kfang.infra.api.RequestResult;
+import kfang.infra.api.RestfulBaseController;
+import kfang.infra.common.model.Pagination;
+import lombok.extern.slf4j.Slf4j;
 
 /**
-* @author ${user}
-* @date ${year}-${month}-${day} ${time}
-* @desc
+* @author: ${user}
+* @date: ${year}-${month}-${day} ${time}
+* @desc:
 */
+@Slf4j
 @RestController
-@RequestMapping("${objectAlias}")
-public class ${controllerName} extends BaseController {
+@RequestMapping("/${objectAlias}")
+public class ${controllerName} extends RestfulBaseController {
 
     @Resource
     private ${serviceName} ${serviceAlias};
 
-    @GetMapping("/list")
-    public ResultJson list() {
-        ResultJson resultJson;
-        try {
-            List<${objectName}> list = this.${serviceAlias}.list(new HashMap<>());
-            resultJson = this.getSuccessResultJson("", list);
-        } catch (Exception e) {
-            logger.error("", e);
-            resultJson = this.getErrorResultJson(e.getMessage());
+    @GetMapping("/page")
+    public RequestResult<${"Pagination"}<${objectName}>> page(@RequestBody ${objectName} form) {
+        try{
+            return this.${serviceAlias}.page(form);
+        }catch (Exception e){
+            log.error("",e);
+            return CommonUtil.serviceError(e.getMessage());
         }
-        return resultJson;
     }
 
     @PostMapping("/add")
-    public ResultJson add(@RequestBody ${objectName} ${objectAlias}) {
-        ResultJson resultJson;
-        try {
-            ${objectAlias}.setCreatedById(this.getCurrentUserCode());
-            ${objectAlias}.setCreatedDate(new Date());
-            this.${serviceAlias}.save(${objectAlias});
-            resultJson = this.getSuccessResultJson("保存成功!");
-        } catch (Exception e) {
-            logger.error("", e);
-            resultJson = this.getErrorResultJson(e.getMessage());
+    public RequestResult<${"Integer"}> add(@RequestBody List<${objectName}> list) {
+        try{
+            return this.${serviceAlias}.add(list);
+        }catch (Exception e){
+            log.error("",e);
+            return CommonUtil.serviceError(e.getMessage());
         }
-        return resultJson;
     }
 
     @PostMapping("/update")
-    public ResultJson update(@RequestBody ${objectName} ${objectAlias}) {
-        ResultJson resultJson;
-        try {
-            ${objectAlias}.setModifyById(this.getCurrentUserCode());
-            ${objectAlias}.setModifyDate(new Date());
-            this.${serviceAlias}.update(${objectAlias});
-            resultJson = this.getSuccessResultJson("修改成功!");
-        } catch (Exception e) {
-            logger.error("", e);
-            resultJson = this.getErrorResultJson(e.getMessage());
+    public RequestResult<${"Integer"}> update(@RequestBody List<${objectName}> list) {
+        try{
+            return this.${serviceAlias}.update(list);
+        }catch (Exception e){
+            log.error("",e);
+            return CommonUtil.serviceError(e.getMessage());
         }
-        return resultJson;
     }
 
-    @GetMapping("/delete")
-    public ResultJson delete(@RequestParam("ids") String ids) {
-        ResultJson resultJson;
-        try {
-            this.${serviceAlias}.delete(ids);
-            resultJson = this.getSuccessResultJson("删除成功!");
-        } catch (Exception e) {
-            logger.error("", e);
-            resultJson = this.getErrorResultJson(e.getMessage());
+    @PostMapping("/delete")
+    public RequestResult<${"Integer"}> delete(@RequestBody List<${"String"}> ids) {
+        try{
+            return this.${serviceAlias}.delete(ids);
+        }catch (Exception e){
+            log.error("",e);
+            return CommonUtil.serviceError(e.getMessage());
         }
-        return resultJson;
     }
+
 }
