@@ -9,16 +9,21 @@
         </#list>
     </resultMap>
 
-    <select id="list" resultMap="${objectAlias}Map">
-        select t.* from ${tableName} t
+    <sql id="basicSql">
+        <#list tables as item>
+        ${item.columnName}<#if (item_index < tables?size-1)>,</#if>
+        </#list>
+    </sql>
+
+    <select id="page" resultMap="${objectAlias}Map">
+        select <include refid="basicSql"/>
+        from ${tableName} t
     </select>
 
     <insert id="save">
         insert into ${tableName}
         (
-        <#list tables as item>
-        ${item.columnName}<#if (item_index < tables?size-1)>,</#if>
-        </#list>
+        <include refid="basicSql"/>
         )
         values
         (
@@ -28,14 +33,33 @@
         )
     </insert>
 
+    <insert id="batchSave">
+        insert into ${tableName}
+        (
+        <include refid="basicSql"/>
+        )
+        values
+        <foreach collection="collection" item="item" separator=",">
+        (
+        <#list tables as item>
+        ${"#"+"{item."+item.propertyName+",jdbcType="+item.jdbcType+"}"}<#if (item_index < tables?size-1)>,</#if>
+        </#list>
+        )
+        </foreach>
+    </insert>
+
     <update id="update">
-        update tab_route t
+        update ${tableName} t
         set
+        <trim suffixOverrides=",">
         <#list tables as item>
         <#if (item_index > 0)>
-        t.${item.columnName}=${"#"+"{"+item.propertyName+"}"}<#if (item_index < tables?size-1)>,</#if>
+            <if test="${item.propertyName} !=null<#if (item.dataType=="String")> and ${item.propertyName} !=''</#if>">
+            t.${item.columnName}=${"#"+"{"+item.propertyName+"}"},
+            </if>
         </#if>
         </#list>
+        </trim>
         where t.${tables[0].columnName}=${"#"+"{"+tables[0].propertyName+"}"}
     </update>
 
