@@ -29,12 +29,12 @@ public interface ${daoName} {
     /**
     * 保存
     */
-    int save(${objectName} objectAlias);
+    int save(${objectName} ${objectAlias});
 
     /**
     * 修改
     */
-    int update(${objectName} objectAlias);
+    int update(${objectName} ${objectAlias});
 
     /**
     * 删除
