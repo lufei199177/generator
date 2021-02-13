@@ -11,19 +11,30 @@
 
     <sql id="basicSql">
         <#list tables as item>
-        ${item.columnName}<#if (item_index < tables?size-1)>,</#if>
+        ${"t."+item.columnName}<#if (item_index < tables?size-1)>,</#if>
         </#list>
     </sql>
 
-    <select id="page" resultMap="${objectAlias}Map">
+    <select id="list" resultMap="${objectAlias}Map">
         select <include refid="basicSql"/>
         from ${tableName} t
+    </select>
+
+    <select id="getByIds" resultMap="${objectAlias}Map">
+        select <include refid="basicSql"/>
+        from ${tableName} t
+        where t.${tables[0].columnName} in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
     </select>
 
     <insert id="save">
         insert into ${tableName}
         (
-        <include refid="basicSql"/>
+        <#list tables as item>
+        ${item.columnName}<#if (item_index < tables?size-1)>,</#if>
+        </#list>
         )
         values
         (
@@ -36,7 +47,9 @@
     <insert id="batchSave">
         insert into ${tableName}
         (
-        <include refid="basicSql"/>
+        <#list tables as item>
+        ${item.columnName}<#if (item_index < tables?size-1)>,</#if>
+        </#list>
         )
         values
         <foreach collection="list" item="item" separator=",">
@@ -55,7 +68,7 @@
         <#list tables as item>
         <#if (item_index > 0)>
             <if test="${item.propertyName} !=null<#if (item.dataType=="String")> and ${item.propertyName} !=''</#if>">
-            t.${item.columnName}=${"#"+"{"+item.propertyName+"}"},
+                t.${item.columnName}=${"#"+"{"+item.propertyName+"}"},
             </if>
         </#if>
         </#list>

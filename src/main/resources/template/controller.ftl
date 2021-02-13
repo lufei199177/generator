@@ -1,17 +1,16 @@
 package ${controllerPackage};
 
-import com.kfang.service.dict.basic.api.util.CommonUtil;
-import org.springframework.web.bind.annotation.*;
-
 import ${modelPackage}.${objectName};
 import ${servicePackage}.${serviceName};
 
-import javax.annotation.Resource;
+import com.kfang.service.dict.city.RespUtil;
 import java.util.List;
+import javax.annotation.Resource;
 import kfang.infra.api.RequestResult;
 import kfang.infra.api.RestfulBaseController;
 import kfang.infra.common.model.Pagination;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
 /**
 * @author: ${user}
@@ -26,33 +25,43 @@ public class ${controllerName} extends RestfulBaseController {
     @Resource
     private ${serviceName} ${serviceAlias};
 
-    @GetMapping("/page")
-    public RequestResult<${"Pagination"}<${objectName}>> page(@RequestBody ${objectName} form) {
+    @GetMapping("/queryPage")
+    public RequestResult<${"Pagination"}<${objectName}>> queryPage(@RequestBody ${objectName} form) {
         try{
-            return this.${serviceAlias}.page(form);
+            return this.${serviceAlias}.queryPage(form);
         }catch (Exception e){
             log.error("",e);
-            return CommonUtil.serviceError(e.getMessage());
+            return RespUtil.serviceError(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getByIds")
+    public RequestResult<${"List<Region>"}> getByIds(@RequestBody List<${"String"}> ids) {
+        try{
+            return RequestResult.ok(this.${serviceAlias}.getByIds(ids));
+        }catch (Exception e){
+            log.error("",e);
+            return RespUtil.serviceError(e.getMessage());
         }
     }
 
     @PostMapping("/add")
-    public RequestResult<${"Integer"}> add(@RequestBody List<${objectName}> list) {
+    public RequestResult<${"Integer"}> add(@RequestBody ${objectName} form) {
         try{
-            return this.${serviceAlias}.add(list);
+            return this.${serviceAlias}.add(form);
         }catch (Exception e){
             log.error("",e);
-            return CommonUtil.serviceError(e.getMessage());
+            return RespUtil.serviceError(e.getMessage());
         }
     }
 
     @PostMapping("/update")
-    public RequestResult<${"Integer"}> update(@RequestBody List<${objectName}> list) {
+    public RequestResult<${"Integer"}> update(@RequestBody ${objectName} form) {
         try{
-            return this.${serviceAlias}.update(list);
+            return this.${serviceAlias}.update(form);
         }catch (Exception e){
             log.error("",e);
-            return CommonUtil.serviceError(e.getMessage());
+            return RespUtil.serviceError(e.getMessage());
         }
     }
 
@@ -62,7 +71,7 @@ public class ${controllerName} extends RestfulBaseController {
             return this.${serviceAlias}.delete(ids);
         }catch (Exception e){
             log.error("",e);
-            return CommonUtil.serviceError(e.getMessage());
+            return RespUtil.serviceError(e.getMessage());
         }
     }
 

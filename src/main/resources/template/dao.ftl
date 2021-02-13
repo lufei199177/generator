@@ -14,7 +14,12 @@ public interface ${daoName} {
     /**
     * 分页查询
     */
-    List<${objectName}> page(${objectName} form);
+    List<${objectName}> list(${objectName} form);
+
+    /**
+    * 根据id查询
+    */
+    List<${objectName}> getByIds(List<${"String"}> ids);
 
     /**
     * 批量保存
@@ -24,12 +29,12 @@ public interface ${daoName} {
     /**
     * 保存
     */
-    int save(${objectName} dto);
+    int save(${objectName} objectAlias);
 
     /**
     * 修改
     */
-    int update(${objectName} dto);
+    int update(${objectName} objectAlias);
 
     /**
     * 删除
