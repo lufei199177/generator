@@ -11,9 +11,8 @@ import com.generator.util.ApplicationUtil;
 public class Application {
 
     public static void main(String[] args) throws Exception {
-        String[] tableNames = {"t_user"};
-        String[] tableObjNames = {"User"};
+        String[] tableNames = {"t_person_position_history"};
+        String[] tableObjNames = {"PersonPositionHistory"};
         ApplicationUtil.start(tableNames, tableObjNames);
     }
-
 }

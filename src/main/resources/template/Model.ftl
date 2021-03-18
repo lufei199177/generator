@@ -1,10 +1,11 @@
-package ${modelPackage};
+package ;
 
 <#list importList as item>
 import ${item};
 </#list>
+import java.io.Serializable;
 import lombok.Data;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -13,14 +14,10 @@ import io.swagger.annotations.ApiModelProperty;
 * @desc:
 */
 @Data
-public class ${objectName} {
+@ApiModel("实体类")
+public class ${objectName}Model implements Serializable {
 <#list tables as table>
-    <#if (table.dataType == "Date")>
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    <#else>
-
-    </#if>
     @ApiModelProperty("${table.comment}")
     private ${table.dataType} ${table.propertyName};
 </#list>
